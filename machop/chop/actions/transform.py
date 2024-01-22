@@ -22,6 +22,7 @@ from chop.tools.get_input import InputGenerator, get_cf_args, get_dummy_input
 from chop.tools.utils import parse_accelerator, to_numpy_if_tensor
 
 from chop.passes.graph.transforms import metadata_value_type_cast_transform_pass
+from chop.tools.utils import device
 
 logger = logging.getLogger(__name__)
 
@@ -72,11 +73,14 @@ def transform(
             task=task,
             device=accelerator,
         )
-        print(f"Pass args: {dummy_in}")
         if len(graph.model.additional_inputs) > 0:
             dummy_in = dummy_in | graph.model.additional_inputs
         graph, _ = add_common_metadata_analysis_pass(
+<<<<<<< HEAD
             graph, pass_args={"dummy_in": dummy_in}
+=======
+            graph, pass_args={"dummy_in": dummy_in, "force_device_meta": False}
+>>>>>>> Fix transform (#15)
         )
         graph, _ = add_software_metadata_analysis_pass(graph, pass_args=None)
 
@@ -86,6 +90,7 @@ def transform(
         pass_name: str
         pass_config: dict
         match pass_name:
+<<<<<<< HEAD
             case "quantize":
                 pass_save_dir = save_dir / "quantize"
                 graph, _ = metadata_value_type_cast_transform_pass(
@@ -96,6 +101,16 @@ def transform(
                 PASSES["summarize_quantization"](
                     ori_graph, graph, save_dir=pass_save_dir
                 )
+=======
+            # TODO: fix this later!
+            # case "quantize":
+            #     pass_save_dir = save_dir / "quantize"
+            #     ori_graph = deepcopy_mase_graph(graph)
+            #     graph = PASSES["quantize"](graph, pass_args=pass_config)
+            #     PASSES["summarize_quantization"](
+            #         ori_graph, graph, save_dir=pass_save_dir
+            #     )
+>>>>>>> Fix transform (#15)
             case "profile_statistics":
                 input_generator = InputGenerator(
                     model_info=model_info,
@@ -181,8 +196,13 @@ def transform(
                 graph, _ = PASSES[pass_name](graph, **kwargs)
             case _:
                 my_pass = PASSES[pass_name]
+<<<<<<< HEAD
                 graph, _ = my_pass(graph, pass_args=pass_config)
 
+=======
+                graph = my_pass(graph, pass_args=pass_config)
+        graph, pass_info = graph
+>>>>>>> Fix transform (#15)
         assert isinstance(
             graph, MaseGraph
         ), f"Return type of {pass_name} must be MaseGraph, got {type(graph)}"

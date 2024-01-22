@@ -135,7 +135,8 @@ def save_mase_graph_interface_pass(graph, pass_args: dict = {}):
     # collect metadata.parameters
     node_n_meta_param = collect_n_meta_param(graph)
     # save metadata.parameters to toml
-    save_n_meta_param(node_n_meta_param, n_meta_param_ckpt)
+    # TODO: temporarily disabled
+    # save_n_meta_param(node_n_meta_param, n_meta_param_ckpt)
     # reset metadata to empty dict {}
     graph = graph_iterator_remove_metadata(graph)
     # save graph module & state dict
