@@ -10,6 +10,7 @@ Training time (seconds): 147
 Test Accuracy: 0.46699467301368713
 Test Loss: 1.4134204387664795
 
+<<<<<<< HEAD
 **Batch size: 128** <br>
 **Learning rate: 1e-5** <br>
 **Max epochs: 5** <br>
@@ -20,10 +21,20 @@ Test Loss: 1.330588936805725
 **Batch size: 64** <br>
 **Learning rate: 1e-5** <br>
 **Max epochs: 5** <br>
+=======
+**Batch size: 64** <br>
+>>>>>>> Saving answers
 Training time 522
 Test Accuracy: 0.5219799280166626
 Test Loss: 1.2776826620101929
 
+<<<<<<< HEAD
+=======
+**Batch size: 16** <br>
+Training time: 
+Test Accuracy: 
+Test Loss:
+>>>>>>> Saving answers
 
 #### Training time and computational efficiency
 Larger batch sizes means that more computations will take place in parallel. This implies a more efficient usage of the hardware since GPUs are designed for high data parallelism. Hence larger batch sizes will decrease the training time.
@@ -46,23 +57,27 @@ Larger batch sizes require more memory in between layers due to backpropagation 
 **Batch size: 256** <br>
 **Learning rate: 1e-5** <br>
 **Epoch number: 1** <br>
-Training time: 
-Test Accuracy: 
-Test Loss: 
 
 **Batch size: 256** <br>
 **Learning rate: 1e-5** <br>
 **Epoch number: 5** <br>
-Training time:
-Test Accuracy: 
-Test Loss: 
+
+**Epoch number: 1** <br>
+Training time: 42
+Test Accuracy: 0.2872336208820343
+Test Loss: 1.5318588018417358
+
+**Epoch number: 5** <br>
+Training time: 153
+Test Accuracy: 0.2872336208820343
+Test Loss: 1.5318588018417358
 
 **Batch size: 256** <br>
 **Learning rate: 1e-5** <br>
 **Max epochs: 10** <br>
-Training time: 
-Test Accuracy: 
-Test Loss: 
+Training time: 286
+Test Accuracy: 0.2872336208820343
+Test Loss: 1.5318588018417358
 #### Underfiting vs Overfitting
 If the max epoch number is too small then it might lead to underfitting because the model was not given enough time to learn the underlying patterns in the data.
 
@@ -156,3 +171,4 @@ Test loss: 1.0560030937194824
 
 The performance displayed by JSC-My is 21.8% better than for JSC-Tiny in terms of test accuracy and 20.3% better in terms of test loss.
 The JSC-My network contains 1.3K parameters compared to 127 from JSC-Tiny.
+#TODO: do I need to collect data to support my claims?
