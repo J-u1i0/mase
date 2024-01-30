@@ -33,6 +33,16 @@ PHYSICAL_MODELS = {
             is_fx_traceable=True,
         ),
     },
+    "jsc-my": {
+        "model": get_jsc_my,
+        "info": MaseModelInfo(
+            "jsc-s",
+            model_source="physical",
+            task_type="physical",
+            physical_data_point_classification=True,
+            is_fx_traceable=True,
+        ),
+    },
     "jsc-s": {
         "model": get_jsc_s,
         "info": MaseModelInfo(
