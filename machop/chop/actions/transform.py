@@ -77,10 +77,14 @@ def transform(
             dummy_in = dummy_in | graph.model.additional_inputs
         graph, _ = add_common_metadata_analysis_pass(
 <<<<<<< HEAD
+<<<<<<< HEAD
             graph, pass_args={"dummy_in": dummy_in}
 =======
             graph, pass_args={"dummy_in": dummy_in, "force_device_meta": False}
 >>>>>>> Fix transform (#15)
+=======
+            graph, pass_args={"dummy_in": dummy_in}
+>>>>>>> basically replicate 5a426ed (#43)
         )
         graph, _ = add_software_metadata_analysis_pass(graph, pass_args=None)
 
@@ -197,6 +201,9 @@ def transform(
             case _:
                 my_pass = PASSES[pass_name]
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> basically replicate 5a426ed (#43)
                 graph, _ = my_pass(graph, pass_args=pass_config)
 
 =======
