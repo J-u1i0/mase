@@ -47,6 +47,7 @@ def test(
 
     if load_name is not None:
         model = load_model(load_name, load_type=load_type, model=model)
+
     plt_model = wrapper_cls(
         model,
         dataset_info=dataset_info,
