@@ -72,6 +72,7 @@ def transform(
             task=task,
             device=accelerator,
         )
+        print(f"Pass args: {dummy_in}")
         if len(graph.model.additional_inputs) > 0:
             dummy_in = dummy_in | graph.model.additional_inputs
         graph, _ = add_common_metadata_analysis_pass(
