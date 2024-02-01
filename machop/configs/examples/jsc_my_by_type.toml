@@ -10,7 +10,8 @@ accelerator = "cpu"
 project = "jsc-my"
 seed = 42
 log_every_n_steps = 5
-load_name = "../../mase_output/jsc_my.ckpt"
+#load_name = "../../mase_output/jsc_my.ckpt"
+load_name = "../../drive/MyDrive/mase_output/lab1/mase_output/jsc-my_classification_jsc_2024-01-30/software/training_ckpts/best-v2.ckpt"
 load_type = "pl"
 
 [passes.quantize]
