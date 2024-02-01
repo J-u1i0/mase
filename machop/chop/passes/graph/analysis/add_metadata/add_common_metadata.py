@@ -223,6 +223,7 @@ def graph_iterator_for_metadata(
 def add_common_metadata_analysis_pass(
     graph, pass_args={"dummy_in": None, "add_value": True, "force_device_meta": False}
 ):
+    print(f"Pass args: {pass_args}")
     """add common metadata
 
     :param graph: a MaseGraph
