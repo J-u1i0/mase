@@ -1,5 +1,5 @@
 # basics
-model = "jsc-tiny"
+model = "jsc-my"
 dataset = "jsc"
 task = "cls"
 
@@ -7,10 +7,10 @@ max_epochs = 5
 batch_size = 512
 learning_rate = 1e-2
 accelerator = "cpu"
-project = "jsc-tiny"
+project = "jsc-my"
 seed = 42
 log_every_n_steps = 5
-load_name = "../mase_output/toy_toy_tiny/software/training_ckpts/best.ckpt"
+load_name = "../../mase_output/jsc_my.ckpt"
 load_type = "pl"
 
 [passes.quantize]
