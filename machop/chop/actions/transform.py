@@ -53,7 +53,7 @@ def transform(
     # graph generation
     graph = MaseGraph(model=model, cf_args=cf_args)
     # graph_metadata = Mase
-    graph = init_metadata_analysis_pass(graph, pass_args=None)
+    graph, _ = init_metadata_analysis_pass(graph, pass_args=None)
     # logger.info(f"graph: {graph.fx_graph}")
 
     # create or load metadata.parameters and mase_graph.model
