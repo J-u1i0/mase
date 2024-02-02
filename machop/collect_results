@@ -1,0 +1,12 @@
+#!/bin/bash
+
+outfile="results.txt"
+
+echo "Results" > ${outfile}
+echo "-----------" >> ${outfile}
+
+for ((i=1; i<=5; i++)) do
+    echo "Line ${i}" >> ${outfile}
+done
+
+#./run_lab1

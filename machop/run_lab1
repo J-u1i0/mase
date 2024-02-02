@@ -1,0 +1,17 @@
+#!/bin/bash
+
+max_epochs="$1"
+batch_size="$2"
+learning_rate="$3"
+
+SECONDS=0
+./ch train jsc-tiny jsc --max-epochs ${max_epochs} --batch-size ${batch_size} --learning-rate ${learning_rate}
+training_time=$SECONDS
+
+echo "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+echo "% Training time (seconds): $training_time %"
+echo "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+
+./ch test jsc-tiny jsc --load ../mase_output/jsc-tiny_classification_jsc_2024-01-29/software/training_ckpts/best.ckpt --load-type pl
+
+

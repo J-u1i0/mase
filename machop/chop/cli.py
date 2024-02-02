@@ -354,6 +354,7 @@ class ChopCLI:
 
         self.logger.info(f"Transforming model {self.args.model!r}...")
         self.data_module.prepare_data()
+        print(f"Data module: {self.data_module}")
         self.data_module.setup()
 
         transform_params = {
