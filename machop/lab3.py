@@ -16,6 +16,7 @@ from chop.tools.logger import get_logger
 from chop.passes.graph.analysis import (
     report_node_meta_param_analysis_pass,
     profile_statistics_analysis_pass,
+    calculate_avg_bits_mg_analysis_pass,
 )
 from chop.passes.graph import (
     add_common_metadata_analysis_pass,
@@ -130,21 +131,12 @@ class Metrics:
         self.precisions = []
         self.recalls = []
         self.f1_scores = []
+        self.mem_bits = []
 
     def calc_mean(self, arr):
         arr = np.array(arr)
         return np.mean(arr, axis=0)
 
-    def show(self):
-        print(f"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-        print(f"Mean Loss: {self.calc_mean(self.losses)}")
-        print(f"Mean Accuracy: {self.calc_mean(self.accuracies)}")
-        print(f"Mean Precision: {self.calc_mean(self.precisions)}")
-        print(f"Mean Recall: {self.calc_mean(self.recalls)}")
-        print(f"Mean F1 score: {self.calc_mean(self.f1_scores)}")
-        print(f"Mean Latency (ns): {self.calc_mean(self.latencies)}")
-        print(f"Mean Confusion matrix:\n{self.calc_mean(self.confusion_matrices)}")
-        print(f"----------------------------------------------")
 
 
 class RunningMetrics(Metrics):
@@ -192,6 +184,16 @@ class RunningMetrics(Metrics):
         precision = precision(preds, ys)
         self.precisions.append(precision.item())
 
+    def show(self):
+        print(f"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+        print(f"Mean Loss: {self.calc_mean(self.losses)}")
+        print(f"Mean Accuracy: {self.calc_mean(self.accuracies)}")
+        print(f"Mean Precision: {self.calc_mean(self.precisions)}")
+        print(f"Mean Recall: {self.calc_mean(self.recalls)}")
+        print(f"Mean F1 score: {self.calc_mean(self.f1_scores)}")
+        print(f"Mean Latency (ns): {self.calc_mean(self.latencies)}")
+        print(f"Mean Confusion matrix:\n{self.calc_mean(self.confusion_matrices)}")
+        print(f"----------------------------------------------")
 
 
 class AvgMetrics(Metrics):
@@ -205,6 +207,44 @@ class AvgMetrics(Metrics):
         self.recalls.append(self.calc_mean(metrics.recalls))
         self.f1_scores.append(self.calc_mean(metrics.f1_scores))
 
+    def mem_requirements(self, graph:MaseGraph):
+        data_in_cost, weights_cost = 0, 0
+        data_in_size, weights_size = 0, 0
+
+        for node in graph.fx_graph.nodes:
+            mase_meta = node.meta["mase"].parameters
+            mase_op = mase_meta["common"]["mase_op"]
+            mase_type = mase_meta["common"]["mase_type"]
+
+            if mase_type in ["module", "module_related_func"]:
+                if mase_op in ["linear", "conv2d", "conv1d"]:
+                    data_in_0_meta = mase_meta["common"]["args"]["data_in_0"]
+                    w_meta = mase_meta["common"]["args"]["weight"]
+                    # maybe add bias
+                    d_size = np.prod(data_in_0_meta["shape"])
+                    w_size = np.prod(w_meta["shape"])
+                    data_in_cost += sum(data_in_0_meta["precision"]) * d_size
+                    data_in_size += d_size
+                    weights_size += w_size
+                    weights_cost += sum(w_meta["precision"]) * w_size
+
+        mem = data_in_cost + weights_cost
+        self.mem_bits.append(mem)
+
+        return graph
+
+    def show(self):
+        print(f"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+        print(f"Memory Requirements (bits): {self.mem_bits[-1]}")
+        print(f"Mean Loss: {self.calc_mean(self.losses)}")
+        print(f"Mean Accuracy: {self.calc_mean(self.accuracies)}")
+        print(f"Mean Precision: {self.calc_mean(self.precisions)}")
+        print(f"Mean Recall: {self.calc_mean(self.recalls)}")
+        print(f"Mean F1 score: {self.calc_mean(self.f1_scores)}")
+        print(f"Mean Latency (ns): {self.calc_mean(self.latencies)}")
+        print(f"Mean Confusion matrix:\n{self.calc_mean(self.confusion_matrices)}")
+        print(f"----------------------------------------------")
+
 # ========================================================================== #
 # Search Strategy: grid search
 # ========================================================================== #
@@ -214,10 +254,11 @@ def search_strategy(search_spaces, runner, data_module, batch_num, mg):
 
     for idx, config in enumerate(search_spaces):
         mg, _ = quantize_transform_pass(mg, config)
+        mg = avg_metrics.mem_requirements(mg)
         metrics = runner(data_module, mg, batch_num)
-        metrics.show()
         # Save avg metrics
         avg_metrics.extract(metrics)
+        avg_metrics.show()
     return avg_metrics
 
 # ========================================================================== #
