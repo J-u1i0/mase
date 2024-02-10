@@ -7,10 +7,10 @@ Entry format:
 
 """
 
-
 MASE_HW_DEPS = {
+    "activations/leaky_relu": ["fixed_arithmetic"],
     # TODO: Failing Test
-    # "activations/fixed_relu": [],
+    "activations/fixed_relu": [],
     # TODO: Failing test: missing "z_proj" in config?
     # "attention/fixed_self_att": ["attention", "cast", "common", "conv",
     #                              "fixed_arithmetic", "linear", "matmul", "ViT"],

@@ -7,8 +7,8 @@ from typing import Any
 import torch
 
 from cocotb.runner import get_runner, get_results
-from mase_components.deps import MASE_HW_DEPS
 
+from mase_components.deps import MASE_HW_DEPS
 
 def mase_runner(
     module_param_list: list[dict[str, Any]] = [dict()],

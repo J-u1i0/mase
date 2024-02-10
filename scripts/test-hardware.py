@@ -8,8 +8,26 @@ from multiprocessing import Process, Queue
 import maselogger
 
 # add components to path
-from mase_components.deps import MASE_HW_DEPS  # TODO: check deps again
+from pathlib import Path
+from pprint import pprint as pp
 
+cocotb_path = Path(".").resolve().parent.parent /"mase/machop/mase_cocotb"
+assert cocotb_path.exists(), "Failed to find machop at: {}".format(cocotb_path)
+sys.path.append(str(cocotb_path))
+
+machop_path = Path(".").resolve().parent.parent /"mase/machop"
+assert machop_path.exists(), "Failed to find machop at: {}".format(machop_path)
+sys.path.append(str(machop_path))
+
+
+#print(f"System path: {sys.path}")
+
+#from mase_components.deps import MASE_HW_DEPS  # TODO: check deps again
+import sys 
+import os
+module_dir = os.path.join(os.path.dirname(__file__), '../machop/mase_components')
+sys.path.append(module_dir)
+from deps import MASE_HW_DEPS
 
 # ---------- TestHardware class --------------
 class TestHardware:
@@ -66,10 +84,16 @@ class TestHardware:
             rtl_file = os.path.join(
                 self.root, "machop/mase_components", group, f"rtl/{module}.sv"
             )
-            include_files = [
-                f"-I{os.path.join(self.root, 'machop/mase_components', group, 'rtl')}"
-                for group in MASE_HW_DEPS[test_case]
-            ]
+            if test_case == "activations/leaky_relu":
+                include_files = [
+                    f"-I{os.path.join(self.root, 'machop/mase_components', group, 'rtl')}"
+                    #for group in MASE_HW_DEPS[test_case]
+                ]
+            else:
+                include_files = [
+                    f"-I{os.path.join(self.root, 'machop/mase_components', group, 'rtl')}"
+                    for group in MASE_HW_DEPS[test_case]
+                ]
             cmd = [
                 "verilator",
                 "--lint-only",
