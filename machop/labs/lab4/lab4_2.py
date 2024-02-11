@@ -1,9 +1,9 @@
 import os, sys
 from pathlib import Path
 from pprint import pprint as pp
-machop_path = Path(".").resolve().parent.parent /"mase/machop"
-assert machop_path.exists(), "Failed to find machop at: {}".format(machop_path)
-sys.path.append(str(machop_path))
+#machop_path = Path(".").resolve().parent.parent /"mase/machop"
+#assert machop_path.exists(), "Failed to find machop at: {}".format(machop_path)
+#sys.path.append(str(machop_path))
 
 from chop.ir.graph.mase_graph import MaseGraph
 
@@ -65,6 +65,8 @@ mg, _ = add_common_metadata_analysis_pass(
 
 config_file = os.path.join(
     os.path.abspath(""),
+    "..",
+    "..",
     "configs",
     "tests",
     "quantize",
