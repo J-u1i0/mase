@@ -1,6 +1,6 @@
 # Lab 4
 
-## Read this page for more information on the hardware metadata pass. Why we have such a metadata setup? How is this different from the software metadata?
+## Task 1: Read this page for more information on the hardware metadata pass. Why we have such a metadata setup? How is this different from the software metadata?
 `add_hardware_metadata_analysis_pass`
 Adds the matadata for the hardware.
 * Describes constraints of the node operation for static analysis or possible transformation.
@@ -515,7 +515,7 @@ INFO:chop.passes.graph.analysis.report.report_node:
 ```
 
 
-## Read through top/hardware/rtl/top.sv and make sure you understand how our MLP model maps to this hardware design. Explain what each part is doing in the .sv file.
+## Task 2: Read through top/hardware/rtl/top.sv and make sure you understand how our MLP model maps to this hardware design. Explain what each part is doing in the .sv file.
 
 ### Parameters
 The top.sv modules is the Top level module for the Neural Network instantiated in hardware.
@@ -547,5 +547,30 @@ The RTL design of the Neural Network is different:
     * `data_out_0`: this is driven by the output of the Fixed Linear Layer 3.
     * `data_out_valid_0`: driven the output signal `fc3_data_out_0_valid` from the Fixed Lineary layer 3.
 
-## Launch the simulation, log and show the simulation results.
+## Task 3: Launch the simulation, log and show the simulation results.
 
+100000.00ns INFO     cocotb.regression                  test passed
+100000.00ns INFO     cocotb.regression                  **************************************************************************************
+                                                        ** TEST                          STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
+                                                        **************************************************************************************
+                                                        ** mase_top_tb.test.test          PASS      100000.00           9.63      10381.41  **
+                                                        **************************************************************************************
+                                                        ** TESTS=1 PASS=1 FAIL=0 SKIP=0             100000.00           9.98      10015.59  **
+                                                        **************************************************************************************
+
+## Task 4: Choose another layer type from the Pytorch list and write a SystemVerilog file to implement that layer in hardware.
+
+### Design
+
+### Effect
+**Throughput**<br>
+
+**Latency**<br>
+
+**Accuracy**<br>
+
+## Extension: cocotb testbench
+
+### Testbench
+
+### Results: make a PR

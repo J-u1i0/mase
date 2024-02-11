@@ -1,9 +1,11 @@
 import os, sys
 from pathlib import Path
 from pprint import pprint as pp
-#machop_path = Path(".").resolve().parent.parent /"mase/machop"
-#assert machop_path.exists(), "Failed to find machop at: {}".format(machop_path)
-#sys.path.append(str(machop_path))
+machop_path = Path(".").resolve().parent.parent /""
+assert machop_path.exists(), "Failed to find machop at: {}".format(machop_path)
+sys.path.append(str(machop_path))
+mase_components = str(machop_path) + "/mase_components"
+sys.path.insert(0, mase_components)
 
 from chop.ir.graph.mase_graph import MaseGraph
 
