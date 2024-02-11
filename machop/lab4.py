@@ -65,8 +65,6 @@ mg, _ = add_common_metadata_analysis_pass(
 
 config_file = os.path.join(
     os.path.abspath(""),
-    "..",
-    "..",
     "configs",
     "tests",
     "quantize",
