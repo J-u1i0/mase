@@ -10,6 +10,7 @@ from chop.tools.logger import set_logging_verbosity
 from chop.passes.graph import (
     save_node_meta_param_interface_pass,
     report_node_meta_param_analysis_pass,
+    report_node_shape_analysis_pass,
     profile_statistics_analysis_pass,
     add_common_metadata_analysis_pass,
     init_metadata_analysis_pass,
@@ -22,11 +23,17 @@ from chop.ir import MaseGraph
 from chop.models import get_model_info, get_model
 
 set_logging_verbosity("info")
+
+# =========================================================================== #
+# Task: Optional
+# =========================================================================== #
+
 batch_size = 8
+JSC_MY_PATH = "../../../../mase_output/jsc_my.ckpt"
+model_name = "jsc-my"
 
-model_name = "jsc-tiny"
+JSC_TINY_PATH = "../../../../mase_output/jsc_tiny_02_07/software/training_ckpts/best.ckpt"
 dataset_name = "jsc"
-
 
 data_module = MaseDataModule(
     name=dataset_name,
@@ -37,7 +44,6 @@ data_module = MaseDataModule(
 data_module.prepare_data()
 data_module.setup()
 
-CHECKPOINT_PATH = "../mase_output/jsc_2024-01-30/best.ckpt"
 model_info = get_model_info(model_name)
 model = get_model(
     model_name,
@@ -45,7 +51,7 @@ model = get_model(
     dataset_info=data_module.dataset_info,
     pretrained=False)
 
-model = load_model(load_name=CHECKPOINT_PATH, load_type="pl", model=model)
+model = load_model(load_name=JSC_MY_PATH, load_type="pl", model=model)
 
 # get the input generator
 input_generator = InputGenerator(
@@ -65,3 +71,6 @@ mg = MaseGraph(model=model)
 mg, _ = init_metadata_analysis_pass(mg, None)
 mg, _ = add_common_metadata_analysis_pass(mg, {"dummy_in": dummy_in})
 mg, _ = add_software_metadata_analysis_pass(mg, None)
+
+from chop.passes.graph.analysis.report.report_flops import report_flops
+mg, _ = report_flops(mg)
