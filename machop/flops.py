@@ -10,6 +10,7 @@ from chop.tools.logger import set_logging_verbosity
 from chop.passes.graph import (
     save_node_meta_param_interface_pass,
     report_node_meta_param_analysis_pass,
+    report_node_shape_analysis_pass,
     profile_statistics_analysis_pass,
     add_common_metadata_analysis_pass,
     init_metadata_analysis_pass,
@@ -24,7 +25,7 @@ from chop.models import get_model_info, get_model
 set_logging_verbosity("info")
 
 batch_size = 8
-model_name = "jsc-my"
+model_name = "jsc-tiny"
 dataset_name = "jsc"
 
 data_module = MaseDataModule(
@@ -35,8 +36,12 @@ data_module = MaseDataModule(
 )
 data_module.prepare_data()
 data_module.setup()
+#print(f"Data module: {data_module}")
+#print(f"Train module: {data_module.train_dataset}")
+#exit()
 
 JSC_MY_PATH = "../../mase_output/jsc_my.ckpt"
+JSC_TINY_PATH = "../../mase_output/jsc_tiny_02_07/software/training_ckpts/best.ckpt"
 
 model_info = get_model_info(model_name)
 model = get_model(
@@ -45,7 +50,7 @@ model = get_model(
     dataset_info=data_module.dataset_info,
     pretrained=False)
 
-model = load_model(load_name=JSC_MY_PATH, load_type="pl", model=model)
+model = load_model(load_name=JSC_TINY_PATH, load_type="pl", model=model)
 
 # get the input generator
 input_generator = InputGenerator(
@@ -57,6 +62,8 @@ input_generator = InputGenerator(
 
 # a demonstration of how to feed an input value to the model
 dummy_in = next(iter(input_generator))
+#print(f"Dummy: {dummy_in}")
+#exit()
 _ = model(**dummy_in)
 
 # generate the mase graph and initialize node metadata
@@ -67,14 +74,23 @@ mg, _ = add_common_metadata_analysis_pass(mg, {"dummy_in": dummy_in})
 mg, _ = add_software_metadata_analysis_pass(mg, None)
 
 # Report the graph's FLOPs.
-from chop.passes.graph.analysis.flop_estimator import report_graph_flops_pass
+#from chop.passes.graph.analysis.flop_estimator import report_graph_flops_pass
 # TODO: what to do about the inputs and outputs for the flops
-_ = report_graph_flops_pass(mg)
+#_ = report_graph_flops_pass(mg)
+#from ptflops import get_model_complexity_info
+#macs, params = get_model_complexity_info(model, (16,), as_strings=True, print_per_layer_stat=True, verbose=True)
 
+#mg, _ = report_node_shape_analysis_pass(mg)
+
+from chop.passes.graph.analysis.report.report_flops import report_flops
+mg, _ = report_flops(mg)
+
+#print(f"Macs:\n{macs}")
+#print(f"Params:\n{params}")
 ## report graph is an analysis pass that shows you the detailed information in the graph
 #from chop.passes.graph import report_graph_analysis_pass
 #_ = report_graph_analysis_pass(mg)
-
+#
 #pass_args = {
 #    "by": "type",
 #    "default": {"config": {"name": None}},
