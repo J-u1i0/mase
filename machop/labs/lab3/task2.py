@@ -6,9 +6,9 @@ from pprint import pprint as pp
 from logging import getLogger
 
 # figure out the correct path
-machop_path = Path(".").resolve().parent.parent /"mase/machop"
-assert machop_path.exists(), "Failed to find machop at: {}".format(machop_path)
-sys.path.append(str(machop_path))
+#machop_path = Path(".").resolve().parent.parent /"mase/machop"
+#assert machop_path.exists(), "Failed to find machop at: {}".format(machop_path)
+#sys.path.append(str(machop_path))
 
 from chop.dataset import MaseDataModule, get_dataset_info
 from chop.tools.logger import get_logger
@@ -295,3 +295,4 @@ def runner_strategy(data_module, mg, batch_num):
 batch_num = 5
 avg_metrics = search_strategy(search_spaces, runner_strategy, data_module, batch_num, mg)
 avg_metrics.show()
+
